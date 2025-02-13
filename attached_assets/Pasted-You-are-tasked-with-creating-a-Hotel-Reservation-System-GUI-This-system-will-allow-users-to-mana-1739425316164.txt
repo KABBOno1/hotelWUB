@@ -1,0 +1,88 @@
+You are tasked with creating a Hotel Reservation System(GUI) . This system will
+allow users to manage hotel rooms, guests, and reservations. The system must
+interact with a database (either MySQL or MongoDB) to store and retrieve data. You
+will implement the system using Java and ensure it adheres to OOP principles such
+as encapsulation, inheritance, polymorphism, and abstraction.
+Requirements:
+1. Database Setup :
+o Use either MySQL or MongoDB as the backend database.
+o Design a schema for the database to store the following entities:
+▪ Rooms : Room Number, Type (e.g., Single, Double, Suite), Price,
+Availability Status.
+▪ Guests : Name, Email, Phone Number.
+▪ Reservations : Reservation ID, Guest ID, Room Number, Check-in
+Date, Check-out Date.
+o Establish relationships between entities where necessary (e.g., a
+reservation links a guest to a room).
+2. Java Application :
+o Develop a Java application that performs CRUD operations on the
+database.
+o Use JDBC (for MySQL) or MongoDB Java Driver (for MongoDB) to
+connect to the database.
+o Implement the following functionalities:
+▪ Create : Add new rooms, guests, and reservations to the
+database.
+▪ Read : Retrieve and display details of rooms, guests, and
+reservations.
+▪ Update : Modify existing records (e.g., update a room's
+availability status, edit a guest's phone number).
+▪ Delete : Remove rooms, guests, or reservations from the
+database.
+3. OOP Features :
+o Use encapsulation to protect the data of your classes.
+o Use inheritance to model relationships between entities (e.g., a Room
+class may inherit from a Property class).
+o Use polymorphism to handle different types of rooms (e.g., Single,
+Double, Suite).
+o Use abstraction to hide implementation details and expose only
+necessary methods.
+4. User Interface :
+o Provide a simple menu-driven interface for interacting with the
+application.
+o Example Menu:
+1. Add a Room
+2. Add a Guest
+3. Make a Reservation
+4. View All Rooms
+5. View All Guests
+6. View All Reservations
+7. Update Room Availability
+8. Delete a Reservation
+9. Exit
+4. Error Handling :
+o Implement proper error handling for database connection issues,
+invalid inputs, and other potential exceptions.
+5. Documentation :
+o Include comments in your code to explain the purpose of each class
+and method.
+o Write a README file describing the project structure, how to set up the
+database, and how to run the application.
+Deliverables:
+1. Source Code :
+o Java files implementing the Hotel Reservation System.
+o Database setup scripts (SQL).
+2. README File :
+o Instructions for setting up the database.
+o Steps to compile and run the application.
+o Explanation of the OOP concepts used in the project.
+3. Database Schema :
+o A diagram or description of the database schema.
+ 4. Add proper screenshots and explain each steps.
+Suggested Class Structure:
+1. Entity Classes :
+o Room: Represents a room with attributes like room number, type, price,
+etc.
+o Guest: Represents a guest with attributes like name, email, phone
+number.
+o Reservation: Represents a reservation with attributes like reservation ID,
+guest ID, room number, check-in date, check-out date.
+2. DAO Classes :
+o RoomDAO: Handles CRUD operations for rooms.
+o GuestDAO: Handles CRUD operations for guests.
+o ReservationDAO: Handles CRUD operations for reservations.
+3. Utility Classes :
+o DatabaseConnection: Manages the database connection.
+o InputHandler: Handles user input and validates it.
+4. Main Class :
+o HotelReservationSystem: Contains the main method and implements the
+menu-driven interface.
