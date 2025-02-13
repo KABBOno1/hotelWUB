@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, real } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp, real } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -28,10 +28,15 @@ export const reservations = pgTable("reservations", {
   checkOutDate: timestamp("check_out_date").notNull(),
 });
 
-// Insert Schemas
+// Insert Schemas with proper date validation
 export const insertRoomSchema = createInsertSchema(rooms).omit({ id: true });
 export const insertGuestSchema = createInsertSchema(guests).omit({ id: true });
-export const insertReservationSchema = createInsertSchema(reservations).omit({ id: true });
+export const insertReservationSchema = createInsertSchema(reservations)
+  .omit({ id: true })
+  .extend({
+    checkInDate: z.coerce.date(),
+    checkOutDate: z.coerce.date(),
+  });
 
 // Types
 export type Room = typeof rooms.$inferSelect;

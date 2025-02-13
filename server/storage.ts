@@ -1,4 +1,7 @@
 import { Room, Guest, Reservation, InsertRoom, InsertGuest, InsertReservation } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
+import { rooms, guests, reservations } from "@shared/schema";
 
 export interface IStorage {
   // Room operations
@@ -23,106 +26,106 @@ export interface IStorage {
   deleteReservation(id: number): Promise<boolean>;
 }
 
-export class MemStorage implements IStorage {
-  private rooms: Map<number, Room>;
-  private guests: Map<number, Guest>;
-  private reservations: Map<number, Reservation>;
-  private currentIds: { rooms: number; guests: number; reservations: number };
-
-  constructor() {
-    this.rooms = new Map();
-    this.guests = new Map();
-    this.reservations = new Map();
-    this.currentIds = { rooms: 1, guests: 1, reservations: 1 };
-  }
-
+export class DatabaseStorage implements IStorage {
   // Room operations
   async getRooms(): Promise<Room[]> {
-    return Array.from(this.rooms.values());
+    return db.select().from(rooms);
   }
 
   async getRoom(id: number): Promise<Room | undefined> {
-    return this.rooms.get(id);
+    const [room] = await db.select().from(rooms).where(eq(rooms.id, id));
+    return room;
   }
 
   async createRoom(room: InsertRoom): Promise<Room> {
-    const id = this.currentIds.rooms++;
-    const newRoom: Room = { 
-      ...room, 
-      id, 
-      status: room.status || "available" 
-    };
-    this.rooms.set(id, newRoom);
+    const [newRoom] = await db.insert(rooms).values(room).returning();
     return newRoom;
   }
 
-  async updateRoom(id: number, room: Partial<Room>): Promise<Room | undefined> {
-    const existingRoom = this.rooms.get(id);
-    if (!existingRoom) return undefined;
-    const updatedRoom = { ...existingRoom, ...room };
-    this.rooms.set(id, updatedRoom);
-    return updatedRoom;
+  async updateRoom(id: number, updates: Partial<Room>): Promise<Room | undefined> {
+    const [updated] = await db
+      .update(rooms)
+      .set(updates)
+      .where(eq(rooms.id, id))
+      .returning();
+    return updated;
   }
 
   async deleteRoom(id: number): Promise<boolean> {
-    return this.rooms.delete(id);
+    const [deleted] = await db
+      .delete(rooms)
+      .where(eq(rooms.id, id))
+      .returning();
+    return !!deleted;
   }
 
   // Guest operations
   async getGuests(): Promise<Guest[]> {
-    return Array.from(this.guests.values());
+    return db.select().from(guests);
   }
 
   async getGuest(id: number): Promise<Guest | undefined> {
-    return this.guests.get(id);
+    const [guest] = await db.select().from(guests).where(eq(guests.id, id));
+    return guest;
   }
 
   async createGuest(guest: InsertGuest): Promise<Guest> {
-    const id = this.currentIds.guests++;
-    const newGuest = { ...guest, id };
-    this.guests.set(id, newGuest);
+    const [newGuest] = await db.insert(guests).values(guest).returning();
     return newGuest;
   }
 
-  async updateGuest(id: number, guest: Partial<Guest>): Promise<Guest | undefined> {
-    const existingGuest = this.guests.get(id);
-    if (!existingGuest) return undefined;
-    const updatedGuest = { ...existingGuest, ...guest };
-    this.guests.set(id, updatedGuest);
-    return updatedGuest;
+  async updateGuest(id: number, updates: Partial<Guest>): Promise<Guest | undefined> {
+    const [updated] = await db
+      .update(guests)
+      .set(updates)
+      .where(eq(guests.id, id))
+      .returning();
+    return updated;
   }
 
   async deleteGuest(id: number): Promise<boolean> {
-    return this.guests.delete(id);
+    const [deleted] = await db
+      .delete(guests)
+      .where(eq(guests.id, id))
+      .returning();
+    return !!deleted;
   }
 
   // Reservation operations
   async getReservations(): Promise<Reservation[]> {
-    return Array.from(this.reservations.values());
+    return db.select().from(reservations);
   }
 
   async getReservation(id: number): Promise<Reservation | undefined> {
-    return this.reservations.get(id);
+    const [reservation] = await db.select().from(reservations).where(eq(reservations.id, id));
+    return reservation;
   }
 
   async createReservation(reservation: InsertReservation): Promise<Reservation> {
-    const id = this.currentIds.reservations++;
-    const newReservation = { ...reservation, id };
-    this.reservations.set(id, newReservation);
+    const [newReservation] = await db.insert(reservations).values({
+      ...reservation,
+      checkInDate: new Date(reservation.checkInDate),
+      checkOutDate: new Date(reservation.checkOutDate)
+    }).returning();
     return newReservation;
   }
 
-  async updateReservation(id: number, reservation: Partial<Reservation>): Promise<Reservation | undefined> {
-    const existingReservation = this.reservations.get(id);
-    if (!existingReservation) return undefined;
-    const updatedReservation = { ...existingReservation, ...reservation };
-    this.reservations.set(id, updatedReservation);
-    return updatedReservation;
+  async updateReservation(id: number, updates: Partial<Reservation>): Promise<Reservation | undefined> {
+    const [updated] = await db
+      .update(reservations)
+      .set(updates)
+      .where(eq(reservations.id, id))
+      .returning();
+    return updated;
   }
 
   async deleteReservation(id: number): Promise<boolean> {
-    return this.reservations.delete(id);
+    const [deleted] = await db
+      .delete(reservations)
+      .where(eq(reservations.id, id))
+      .returning();
+    return !!deleted;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

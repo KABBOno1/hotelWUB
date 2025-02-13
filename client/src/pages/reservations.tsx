@@ -7,7 +7,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Room, Guest, Reservation, insertReservationSchema } from "@shared/schema";
+import { Room, Guest, Reservation, insertReservationSchema, insertGuestSchema } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
@@ -15,7 +15,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { CalendarIcon, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Input } from "@/components/ui/input"; // Import Input component
+import { Input } from "@/components/ui/input";
 
 export default function Reservations() {
   const { toast } = useToast();
@@ -34,8 +34,23 @@ export default function Reservations() {
     }
   });
 
+  const quickBookForm = useForm({
+    resolver: zodResolver(insertGuestSchema.extend({
+      roomId: insertReservationSchema.shape.roomId,
+      checkOutDate: insertReservationSchema.shape.checkOutDate,
+    })),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      roomId: 0,
+      checkOutDate: new Date()
+    }
+  });
+
   const [checkInPopoverOpen, setCheckInPopoverOpen] = useState(false);
   const [checkOutPopoverOpen, setCheckOutPopoverOpen] = useState(false);
+  const [quickBookCheckOutOpen, setQuickBookCheckOutOpen] = useState(false);
 
   const createReservation = useMutation({
     mutationFn: async (values: any) => {
@@ -59,6 +74,39 @@ export default function Reservations() {
     }
   });
 
+  const createQuickBooking = useMutation({
+    mutationFn: async (values: any) => {
+      // First create the guest
+      const guestResponse = await apiRequest("POST", "/api/guests", {
+        name: values.name,
+        email: values.email,
+        phone: values.phone
+      });
+
+      // Then create the reservation
+      return apiRequest("POST", "/api/reservations", {
+        guestId: guestResponse.id,
+        roomId: values.roomId,
+        checkInDate: new Date().toISOString(),
+        checkOutDate: values.checkOutDate.toISOString()
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/reservations"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/guests"] });
+      toast({ title: "Quick booking successful" });
+      quickBookForm.reset();
+      setIsQuickBookOpen(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed to create quick booking",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  });
+
   // Find guest and room details for display
   const getGuestName = (guestId: number) => {
     return guests.find(g => g.id === guestId)?.name || 'Unknown Guest';
@@ -71,7 +119,7 @@ export default function Reservations() {
   const availableRooms = rooms.filter(room => room.status === 'available');
 
   return (
-    <div>
+    <div className="max-w-[1200px] mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <h1 className="text-3xl md:text-4xl font-bold">
           <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
@@ -168,13 +216,15 @@ export default function Reservations() {
                               {field.value ? format(field.value, "PPP") : "Select date"}
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
+                          <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
                               selected={field.value}
                               onSelect={(date) => {
-                                field.onChange(date);
-                                setCheckInPopoverOpen(false);
+                                if (date) {
+                                  field.onChange(date);
+                                  setCheckInPopoverOpen(false);
+                                }
                               }}
                               disabled={(date) => date < new Date()}
                               initialFocus
@@ -204,13 +254,15 @@ export default function Reservations() {
                               {field.value ? format(field.value, "PPP") : "Select date"}
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
+                          <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
                               selected={field.value}
                               onSelect={(date) => {
-                                field.onChange(date);
-                                setCheckOutPopoverOpen(false);
+                                if (date) {
+                                  field.onChange(date);
+                                  setCheckOutPopoverOpen(false);
+                                }
                               }}
                               disabled={(date) =>
                                 date < form.getValues("checkInDate") ||
@@ -238,26 +290,28 @@ export default function Reservations() {
         </div>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Guest</TableHead>
-            <TableHead>Room</TableHead>
-            <TableHead>Check-in Date</TableHead>
-            <TableHead>Check-out Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {reservations.map(reservation => (
-            <TableRow key={reservation.id}>
-              <TableCell>{getGuestName(reservation.guestId)}</TableCell>
-              <TableCell>{getRoomNumber(reservation.roomId)}</TableCell>
-              <TableCell>{format(new Date(reservation.checkInDate), "PPP")}</TableCell>
-              <TableCell>{format(new Date(reservation.checkOutDate), "PPP")}</TableCell>
+      <div className="bg-white/50 backdrop-blur-sm rounded-lg shadow-lg p-4 mb-8">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Guest</TableHead>
+              <TableHead>Room</TableHead>
+              <TableHead>Check-in Date</TableHead>
+              <TableHead>Check-out Date</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {reservations.map(reservation => (
+              <TableRow key={reservation.id}>
+                <TableCell>{getGuestName(reservation.guestId)}</TableCell>
+                <TableCell>{getRoomNumber(reservation.roomId)}</TableCell>
+                <TableCell>{format(new Date(reservation.checkInDate), "PPP")}</TableCell>
+                <TableCell>{format(new Date(reservation.checkOutDate), "PPP")}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Quick Book Dialog */}
       <Dialog open={isQuickBookOpen} onOpenChange={setIsQuickBookOpen}>
@@ -267,10 +321,10 @@ export default function Reservations() {
             <DialogDescription>Book a room instantly with minimal information.</DialogDescription>
           </DialogHeader>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(data => createReservation.mutate(data))} className="space-y-4">
+          <Form {...quickBookForm}>
+            <form onSubmit={quickBookForm.handleSubmit(data => createQuickBooking.mutate(data))} className="space-y-4">
               <FormField
-                control={form.control}
+                control={quickBookForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -283,7 +337,7 @@ export default function Reservations() {
               />
 
               <FormField
-                control={form.control}
+                control={quickBookForm.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
@@ -296,7 +350,7 @@ export default function Reservations() {
               />
 
               <FormField
-                control={form.control}
+                control={quickBookForm.control}
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
@@ -309,7 +363,7 @@ export default function Reservations() {
               />
 
               <FormField
-                control={form.control}
+                control={quickBookForm.control}
                 name="roomId"
                 render={({ field }) => (
                   <FormItem>
@@ -331,12 +385,12 @@ export default function Reservations() {
               />
 
               <FormField
-                control={form.control}
+                control={quickBookForm.control}
                 name="checkOutDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Check-out Date</FormLabel>
-                    <Popover>
+                    <Popover open={quickBookCheckOutOpen} onOpenChange={setQuickBookCheckOutOpen}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -349,13 +403,15 @@ export default function Reservations() {
                           {field.value ? format(field.value, "PPP") : "Select date"}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
+                      <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
                           selected={field.value}
                           onSelect={(date) => {
-                            field.onChange(date);
-                            setCheckOutPopoverOpen(false);
+                            if (date) {
+                              field.onChange(date);
+                              setQuickBookCheckOutOpen(false);
+                            }
                           }}
                           disabled={(date) => date < new Date()}
                           initialFocus
@@ -370,8 +426,8 @@ export default function Reservations() {
                 <Button variant="outline" onClick={() => setIsQuickBookOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit">
-                  Book Now
+                <Button type="submit" disabled={createQuickBooking.isPending}>
+                  {createQuickBooking.isPending ? "Booking..." : "Book Now"}
                 </Button>
               </div>
             </form>
