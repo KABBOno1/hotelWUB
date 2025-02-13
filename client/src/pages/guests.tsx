@@ -36,10 +36,11 @@ export default function Guests() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8 relative">
         <h1 className="text-4xl font-bold">Guests</h1>
 
-        <Dialog>
+        <div className="flex items-center gap-2">
+          <Dialog>
           <DialogTrigger asChild>
             <Button>Add Guest</Button>
           </DialogTrigger>
@@ -97,6 +98,7 @@ export default function Guests() {
             </Form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <Table>
