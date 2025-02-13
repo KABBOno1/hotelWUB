@@ -61,14 +61,13 @@ function App() {
           />
         )}
 
-        <div className="flex flex-col md:flex-row">
+        <div className="flex">
           {/* Sidebar */}
           <div
             className={cn(
               "w-64 bg-sidebar border-r border-sidebar-border shadow-lg",
-              "fixed md:static inset-y-0 left-0 z-40",
-              "transform transition-transform duration-200 ease-in-out",
-              "flex flex-col",
+              "fixed md:sticky top-0 inset-y-0 left-0 z-40",
+              "transform transition-transform duration-200 ease-in-out h-screen",
               isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
             )}
           >
@@ -100,8 +99,8 @@ function App() {
           </div>
 
           {/* Main Content */}
-          <main className="flex-1 min-h-screen md:ml-64">
-            <div className="container mx-auto px-4 py-8 md:px-8">
+          <main className="flex-1 md:ml-64">
+            <div className="container mx-auto p-4 md:p-6">
               <Router />
             </div>
           </main>

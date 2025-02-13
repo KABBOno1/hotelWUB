@@ -15,6 +15,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { CalendarIcon, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Input } from "@/components/ui/input"; // Import Input component
 
 export default function Reservations() {
   const { toast } = useToast();
@@ -50,8 +51,8 @@ export default function Reservations() {
       form.reset();
     },
     onError: (error) => {
-      toast({ 
-        title: "Failed to create reservation", 
+      toast({
+        title: "Failed to create reservation",
         description: error.message,
         variant: "destructive"
       });
@@ -79,8 +80,8 @@ export default function Reservations() {
         </h1>
 
         <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="w-full md:w-auto bg-primary/90 hover:bg-primary shadow-lg"
             onClick={() => setIsQuickBookOpen(true)}
           >
@@ -211,8 +212,8 @@ export default function Reservations() {
                                 field.onChange(date);
                                 setCheckOutPopoverOpen(false);
                               }}
-                              disabled={(date) => 
-                                date < form.getValues("checkInDate") || 
+                              disabled={(date) =>
+                                date < form.getValues("checkInDate") ||
                                 date < new Date()
                               }
                               initialFocus
@@ -223,8 +224,8 @@ export default function Reservations() {
                     )}
                   />
 
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="w-full"
                     disabled={createReservation.isPending}
                   >
@@ -263,35 +264,118 @@ export default function Reservations() {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Quick Book a Room</DialogTitle>
-            <DialogDescription>Book a room with minimal information required.</DialogDescription>
+            <DialogDescription>Book a room instantly with minimal information.</DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select available room" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableRooms.map(room => (
-                  <SelectItem key={room.id} value={room.id.toString()}>
-                    {room.roomNumber} - {room.type} (${room.price})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(data => createReservation.mutate(data))} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Guest Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter guest name" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" onClick={() => setIsQuickBookOpen(false)}>
-                Cancel
-              </Button>
-              <Button onClick={() => {
-                toast({ title: "Coming soon!", description: "Quick booking will be available in the next update." });
-                setIsQuickBookOpen(false);
-              }}>
-                Book Now
-              </Button>
-            </div>
-          </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" {...field} placeholder="Enter email" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter phone number" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="roomId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Select Room</FormLabel>
+                    <Select onValueChange={(value) => field.onChange(parseInt(value))} value={field.value?.toString()}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose a room" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableRooms.map(room => (
+                          <SelectItem key={room.id} value={room.id.toString()}>
+                            {room.roomNumber} - {room.type} (${room.price})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="checkOutDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Check-out Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? format(field.value, "PPP") : "Select date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={(date) => {
+                            field.onChange(date);
+                            setCheckOutPopoverOpen(false);
+                          }}
+                          disabled={(date) => date < new Date()}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <Button variant="outline" onClick={() => setIsQuickBookOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">
+                  Book Now
+                </Button>
+              </div>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </div>
