@@ -56,7 +56,7 @@ function App() {
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}>
           <div className="p-6">
-            <h1 className="text-2xl font-bold text-sidebar-foreground bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold text-sidebar-foreground bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
               WUB Hotel
             </h1>
             <div className="text-xs text-muted-foreground mt-1">Created by Kabbo</div>
@@ -106,7 +106,7 @@ function NavLink({
 }) {
   return (
     <Link href={href}>
-      <a
+      <div
         onClick={onClick}
         className={cn(
           "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all",
@@ -117,7 +117,7 @@ function NavLink({
         )}
       >
         {children}
-      </a>
+      </div>
     </Link>
   );
 }

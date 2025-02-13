@@ -1,0 +1,89 @@
+🚀 Improved Hotel Reservation System (GUI) – Prompt
+Problem Statement:
+Develop a Hotel Reservation System (GUI) in Java using MySQL as the database. The system must support hotel room management, guest tracking, and reservation handling while adhering to OOP principles like encapsulation, inheritance, polymorphism, and abstraction.
+
+📌 Core Functionalities:
+1. Database Setup (MySQL)
+Create a relational database schema with the following entities:
+Rooms: Room Number, Type (Single/Double/Suite), Price, Status (Available/Booked/Maintenance).
+Guests: Name, Email, Phone Number, Membership Status.
+Reservations: Reservation ID, Guest ID, Room Number, Check-in Date, Check-out Date, Payment Status.
+Establish relationships using foreign keys for proper data integrity.
+2. Java Application Features
+✅ CRUD Operations for:
+
+Rooms: Add, update, delete, and view available rooms.
+Guests: Register guests, update details, and track visit history.
+Reservations: Create, modify, cancel, and extend bookings.
+✅ Room Categorization & Pricing Tiers
+
+Set dynamic pricing based on seasons, weekends, or promotions.
+✅ Dynamic Room Status Tracking
+
+Auto-update room status after check-out, cleaning, or maintenance.
+✅ Multiple Room Booking Per Guest
+
+Allow guests to book multiple rooms under one reservation.
+✅ Auto-Assign Best Available Room
+
+Suggest the best available room based on guest preferences (e.g., Sea View, King Bed).
+✅ Booking Extensions & Early Checkouts
+
+Allow stay extensions based on room availability.
+Adjust the bill dynamically.
+3. Guest Management Enhancements
+✅ Loyalty & Membership Program
+
+Track guest visits and offer discounts for repeat bookings.
+✅ Guest Preferences & Special Requests
+
+Store preferences like room type, food, and amenities.
+✅ Blacklisting Feature
+
+Maintain a list of guests with bad records (e.g., no-shows, damages).
+4. Payments & Billing
+✅ Multiple Payment Methods
+
+Accept Cash, Credit Cards, bKash, Nagad, Rocket, and Bank Transfers.
+✅ Invoice Generation (PDF/Print)
+
+Automatically generate a PDF invoice with room details and charges.
+✅ Late Payment & Cancellation Fees
+
+Charge guests for late payments or cancellations after a deadline.
+✅ Tax & Discount System
+
+Implement VAT, service charges, and custom discounts dynamically.
+5. Admin Dashboard & Reports
+✅ Real-time Dashboard with Graphs & Charts
+
+Display Occupancy Rate, Revenue, Available Rooms, and Bookings using JavaFX.
+✅ Reservation Analytics & Trends
+
+Track the busiest months and most booked rooms.
+✅ User Access Control (Admin vs Receptionist)
+
+Admin: Full access.
+Receptionist: Limited access to reservations.
+✅ SMS & Email Notifications
+
+Send booking confirmations and check-in reminders via email/SMS (Twilio API or SMTP).
+6. System Optimization & Security
+✅ Backup & Restore Database
+
+Enable daily automatic backups.
+✅ Logging & Activity Tracking
+
+Log every action (e.g., reservation creation, payments).
+✅ Two-Factor Authentication for Admins
+
+Implement OTP-based login for enhanced security.
+✅ Data Encryption
+
+Encrypt guest phone numbers and emails.
+🎯 Deliverables:
+1️⃣ Source Code (Java + JDBC for MySQL)
+2️⃣ SQL Scripts for database setup
+3️⃣ README File with installation/setup instructions
+4️⃣ Database Schema Diagram
+5️⃣ Screenshots & Documentation explaining features
