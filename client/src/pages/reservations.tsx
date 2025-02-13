@@ -12,7 +12,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Reservations() {
@@ -60,19 +60,26 @@ export default function Reservations() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Reservations</h1>
-        
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold">
+          <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+            Reservations
+          </span>
+        </h1>
+
         <Dialog>
           <DialogTrigger asChild>
-            <Button>New Reservation</Button>
+            <Button size="lg" className="w-full md:w-auto bg-primary/90 hover:bg-primary shadow-lg">
+              <CalendarDays className="h-5 w-5 mr-2" />
+              New Reservation
+            </Button>
           </DialogTrigger>
-          
+
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Create New Reservation</DialogTitle>
             </DialogHeader>
-            
+
             <Form {...form}>
               <form onSubmit={form.handleSubmit(data => createReservation.mutate(data))} className="space-y-4">
                 <FormField
@@ -96,7 +103,7 @@ export default function Reservations() {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="roomId"
@@ -120,7 +127,7 @@ export default function Reservations() {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="checkInDate"
@@ -152,7 +159,7 @@ export default function Reservations() {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="checkOutDate"
@@ -188,7 +195,7 @@ export default function Reservations() {
                     </FormItem>
                   )}
                 />
-                
+
                 <Button 
                   type="submit" 
                   className="w-full"
@@ -201,7 +208,7 @@ export default function Reservations() {
           </DialogContent>
         </Dialog>
       </div>
-      
+
       <Table>
         <TableHeader>
           <TableRow>
