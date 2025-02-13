@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Room, insertRoomSchema } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { BedDouble } from "lucide-react";
 
 export default function Rooms() {
   const { toast } = useToast();
@@ -39,19 +38,12 @@ export default function Rooms() {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold">
-          <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-            Rooms
-          </span>
-        </h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold">Rooms</h1>
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button size="lg" className="w-full md:w-auto bg-primary/90 hover:bg-primary shadow-lg">
-              <BedDouble className="h-5 w-5 mr-2" />
-              Add Room
-            </Button>
+            <Button>Add Room</Button>
           </DialogTrigger>
 
           <DialogContent>
