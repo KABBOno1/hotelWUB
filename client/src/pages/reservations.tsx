@@ -33,7 +33,13 @@ export default function Reservations() {
 
   const createReservation = useMutation({
     mutationFn: async (values: ReturnType<typeof form.getValues>) => {
-      return apiRequest("POST", "/api/reservations", values);
+      // Convert dates to ISO strings before sending to API
+      const formattedValues = {
+        ...values,
+        checkInDate: values.checkInDate.toISOString(),
+        checkOutDate: values.checkOutDate.toISOString()
+      };
+      return apiRequest("POST", "/api/reservations", formattedValues);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/reservations"] });

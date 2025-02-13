@@ -105,7 +105,6 @@ export default function Guests() {
             </Form>
           </DialogContent>
         </Dialog>
-        </div>
       </div>
 
       <Table>
