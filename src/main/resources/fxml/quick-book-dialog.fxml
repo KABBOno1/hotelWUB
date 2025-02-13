@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.wubhotel.controller.QuickBookController"
+            styleClass="dialog-pane">
+    
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
+          AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
+          
+        <Label text="Quick Book" styleClass="dialog-header"/>
+        <Label text="Book a room instantly with minimal information" styleClass="dialog-subheader"/>
+        
+        <GridPane vgap="5" hgap="5">
+            <Label text="Guest Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="guestNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      promptText="Enter guest name"/>
+            
+            <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                      promptText="Enter email address"/>
+            
+            <Label text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                      promptText="Enter phone number"/>
+            
+            <Label text="Room:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <ComboBox fx:id="roomComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                     maxWidth="Infinity"/>
+            
+            <Label text="Check-out Date:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <DatePicker fx:id="checkOutDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                       maxWidth="Infinity"/>
+        </GridPane>
+        
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="bookButton" text="Book Now" onAction="#handleQuickBook" 
+                    defaultButton="true" styleClass="primary-button"/>
+            <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" 
+                    cancelButton="true"/>
+        </HBox>
+        
+    </VBox>
+</AnchorPane>

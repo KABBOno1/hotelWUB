@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.wubhotel.controller.RoomDialogController"
+            styleClass="dialog-pane">
+    
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
+          AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
+          
+        <Label text="Add New Room" styleClass="dialog-header"/>
+        
+        <GridPane vgap="5" hgap="5">
+            <Label text="Room Number:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="roomNumberField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            
+            <Label text="Room Type:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <ComboBox fx:id="roomTypeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            
+            <Label text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        </GridPane>
+        
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="saveButton" text="Save" onAction="#handleSave" defaultButton="true"/>
+            <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" cancelButton="true"/>
+        </HBox>
+        
+    </VBox>
+</AnchorPane>

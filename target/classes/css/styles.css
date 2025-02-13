@@ -1,0 +1,196 @@
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-background-color: linear-gradient(to bottom right, #f5f5f5, #ffffff);
+}
+
+.dashboard-container {
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+.stat-box {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+    -fx-alignment: center;
+    -fx-min-width: 200;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-transition: -fx-effect 0.3s;
+}
+
+.stat-box:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(98,0,238,0.2), 15, 0, 0, 0);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.stat-label {
+    -fx-font-size: 14;
+    -fx-text-fill: #666666;
+}
+
+.stat-value {
+    -fx-font-size: 28;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #6200ee, #9c27b0);
+}
+
+.button {
+    -fx-background-color: #6200ee;
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-font-size: 13;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+    -fx-transition: -fx-background-color 0.3s, -fx-effect 0.3s;
+}
+
+.button:hover {
+    -fx-background-color: #3700b3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 0);
+}
+
+.primary-button {
+    -fx-background-color: linear-gradient(to right, #6200ee, #9c27b0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 0);
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(to right, #3700b3, #7b1fa2);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 12, 0, 0, 0);
+}
+
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 0);
+}
+
+.dialog-header {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #6200ee, #9c27b0);
+}
+
+.dialog-subheader {
+    -fx-font-size: 14;
+    -fx-text-fill: #666666;
+    -fx-opacity: 0.8;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to right, #6200ee, #9c27b0);
+    -fx-background-radius: 10 10 0 0;
+    -fx-padding: 5;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-table-cell-border-color: transparent;
+    -fx-transition: -fx-background-color 0.2s;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f8f8f8;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(98,0,238,0.1);
+}
+
+.tab-pane {
+    -fx-padding: 10;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 5;
+}
+
+.tab {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 5 5 0 0;
+    -fx-cursor: hand;
+    -fx-padding: 8 15;
+}
+
+.tab:selected {
+    -fx-background-color: linear-gradient(to right, #6200ee, #9c27b0);
+}
+
+.tab .tab-label {
+    -fx-text-fill: #666666;
+    -fx-font-size: 13;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+.text-field, .combo-box-base, .date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 5;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5;
+    -fx-padding: 8;
+    -fx-transition: -fx-border-color 0.3s;
+}
+
+.text-field:focused, .combo-box-base:focused, .date-picker:focused {
+    -fx-border-color: #6200ee;
+    -fx-effect: dropshadow(three-pass-box, rgba(98,0,238,0.2), 5, 0, 0, 0);
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #6200ee;
+    -fx-background-radius: 0 5 5 0;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+.menu-bar {
+    -fx-background-color: linear-gradient(to right, #6200ee, #9c27b0);
+}
+
+.menu .label {
+    -fx-text-fill: white;
+}
+
+.menu-item .label {
+    -fx-text-fill: #333333;
+}
+
+.grid-pane {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-padding: 20;
+}

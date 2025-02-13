@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.wubhotel.controller.ReservationDialogController"
+            styleClass="dialog-pane">
+    
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
+          AnchorPane.topAnchor="10" AnchorPane.bottomAnchor="10">
+          
+        <Label text="New Reservation" styleClass="dialog-header"/>
+        
+        <GridPane vgap="5" hgap="5">
+            <Label text="Guest:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="guestComboBox" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                     maxWidth="Infinity"/>
+            
+            <Label text="Room:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <ComboBox fx:id="roomComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                     maxWidth="Infinity"/>
+            
+            <Label text="Check-in Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <DatePicker fx:id="checkInDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                       maxWidth="Infinity"/>
+            
+            <Label text="Check-out Date:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <DatePicker fx:id="checkOutDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                       maxWidth="Infinity"/>
+        </GridPane>
+        
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="saveButton" text="Save" onAction="#handleSave" defaultButton="true"/>
+            <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" cancelButton="true"/>
+        </HBox>
+        
+    </VBox>
+</AnchorPane>
